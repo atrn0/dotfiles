@@ -3,3 +3,6 @@
 	email = 14242642+aratasato@users.noreply.github.com
 [core]
 	autocrlf = input
+
+[url "git@github.com:"]
+    insteadOf = https://github.com/
