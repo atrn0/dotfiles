@@ -2,3 +2,8 @@
 
 !.gitignore
 !.gitconfig
+!.zshenv
+!.zshrc
+!.zlogin
+!.zlogout
+!.zprofile
