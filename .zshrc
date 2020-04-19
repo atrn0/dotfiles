@@ -17,6 +17,9 @@ PURE_PROMPT_SYMBOL=🌵
 zstyle :prompt:pure:git:branch color '#bbb'
 prompt pure
 
+### incremental completion
+source $HOME/.zsh/incr-0.2.zsh
+
 ### Python
 py_init() {
   export PYENV_ROOT="$HOME/.pyenv"
