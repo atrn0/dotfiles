@@ -10,10 +10,12 @@ fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 autoload -U compinit
 compinit -C
 
-# Source Prezto.
-# if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-#   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-# fi
+### Pure prompt
+### https://github.com/sindresorhus/pure
+autoload -U promptinit; promptinit
+PURE_PROMPT_SYMBOL=🌵
+zstyle :prompt:pure:git:branch color '#bbb'
+prompt pure
 
 ### Python
 py_init() {

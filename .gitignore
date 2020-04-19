@@ -1,9 +1,1 @@
-*
-
-!.gitignore
-!.gitconfig
-!.zshenv
-!.zshrc
-!.zlogin
-!.zlogout
-!.zprofile
+.DS_Store
