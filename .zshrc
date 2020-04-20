@@ -7,8 +7,12 @@
 ### completion
 fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 fpath=($(ghq root)/github.com/zsh-users/zsh-completions/src $fpath)
+source $HOME/.zsh/completion.zsh
 autoload -U compinit
 compinit -C
+
+# ------------------------------------------------------------------------------
+##### Plugins #####
 
 ### Pure prompt
 ### https://github.com/sindresorhus/pure
@@ -21,6 +25,8 @@ prompt pure
 source $(ghq root)/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
 ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+bindkey '\t ' autosuggest-accept
+# source $HOME/.zsh/incr*.zsh
 
 ### syntax highlighting
 source $(ghq root)/github.com/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -31,6 +37,14 @@ bindkey -v
 ### autojump
 ### https://github.com/wting/autojump
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+
+### zsh-history-substring-search
+### https://github.com/zsh-users/zsh-history-substring-search
+source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# ------------------------------------------------------------------------------
 
 ### Python
 py_init() {
@@ -67,7 +81,7 @@ rb_init() {
   eval "$(rbenv init -)"
 }
 
-rb_init
+# rb_init
 
 ### Go
 go_init() {
