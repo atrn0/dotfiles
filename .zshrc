@@ -4,9 +4,9 @@
 # Authors:
 #   Arata Sato <densiarata2@gmail.com>
 
-# completion
+### completion
 fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
-
+fpath=($(ghq root)/github.com/zsh-users/zsh-completions/src $fpath)
 autoload -U compinit
 compinit -C
 
@@ -18,7 +18,19 @@ zstyle :prompt:pure:git:branch color '#bbb'
 prompt pure
 
 ### incremental completion
-source $HOME/.zsh/incr-0.2.zsh
+source $(ghq root)/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
+ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+
+### syntax highlighting
+source $(ghq root)/github.com/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+### vim style key bind
+bindkey -v
+
+### autojump
+### https://github.com/wting/autojump
+[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
 
 ### Python
 py_init() {
