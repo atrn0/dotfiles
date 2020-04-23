@@ -36,7 +36,8 @@ bindkey -v
 
 ### autojump
 ### https://github.com/wting/autojump
-[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+# [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 ### zsh-history-substring-search
 ### https://github.com/zsh-users/zsh-history-substring-search
@@ -53,7 +54,7 @@ py_init() {
   # Setting for pip
   export PATH="$PYENV_ROOT/shims:$PATH"
   eval "$(pyenv init -)"
-  eval "$(pipenv --completion)"
+  # eval "$(pipenv --completion)"
 }
 
 pyenv() {
@@ -68,11 +69,11 @@ python() {
   python "$@"
 }
 
-pipenv() {
-  unset -f pipenv
-  py_init
-  pipenv "$@"
-}
+# pipenv() {
+#   unset -f pipenv
+#   py_init
+#   pipenv "$@"
+# }
 
 ### Ruby
 rb_init() {
@@ -169,7 +170,7 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 ### aliases ###
 alias myip='curl http://ipecho.net/plain; echo'
 alias reload='source $HOME/.zshrc'
-alias zshconfig='code $HOME/.zshrc'
+alias zshconfig='code $(ghq root)/github.com/atrn0/dotfiles'
 
 # if (which zprof >/dev/null 2>&1); then
 #   zprof
