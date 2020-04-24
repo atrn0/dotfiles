@@ -82,7 +82,7 @@ rb_init() {
   eval "$(rbenv init -)"
 }
 
-# rb_init
+rb_init
 
 ### Go
 go_init() {
