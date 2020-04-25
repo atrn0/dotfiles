@@ -9,7 +9,7 @@ fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 fpath=($(ghq root)/github.com/zsh-users/zsh-completions/src $fpath)
 source $HOME/.zsh/completion.zsh
 autoload -U compinit
-compinit -C
+# compinit
 
 # ------------------------------------------------------------------------------
 ##### Plugins #####
@@ -22,11 +22,12 @@ zstyle :prompt:pure:git:branch color '#bbb'
 prompt pure
 
 ### incremental completion
-source $(ghq root)/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
-ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-bindkey '\t ' autosuggest-accept
-# source $HOME/.zsh/incr*.zsh
+# source $(ghq root)/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
+# ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
+# ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+# bindkey '\t ' autosuggest-accept
+### https://mimosa-pudica.net/zsh-incremental.html
+source $HOME/.zsh/incr*.zsh
 
 ### syntax highlighting
 source $(ghq root)/github.com/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -36,6 +37,7 @@ bindkey -v
 
 ### autojump
 ### https://github.com/wting/autojump
+### make sure to use Python3
 # [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
@@ -57,17 +59,19 @@ py_init() {
   # eval "$(pipenv --completion)"
 }
 
-pyenv() {
-  unset -f pyenv
-  py_init
-  pyenv "$@"
-}
+py_init
 
-python() {
-  unset -f python
-  py_init
-  python "$@"
-}
+# pyenv() {
+#   unset -f pyenv
+#   py_init
+#   pyenv "$@"
+# }
+
+# python() {
+#   unset -f python
+#   py_init
+#   python "$@"
+# }
 
 # pipenv() {
 #   unset -f pipenv
