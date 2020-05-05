@@ -7,9 +7,10 @@
 ### completion
 fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 fpath=($(ghq root)/github.com/zsh-users/zsh-completions/src $fpath)
+fpath=($HOME/.zsh/completion $fpath)
 source $HOME/.zsh/completion.zsh
 autoload -U compinit
-# compinit
+compinit -C
 
 # ------------------------------------------------------------------------------
 ##### Plugins #####
@@ -22,12 +23,12 @@ zstyle :prompt:pure:git:branch color '#bbb'
 prompt pure
 
 ### incremental completion
-# source $(ghq root)/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
-# ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
-# ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-# bindkey '\t ' autosuggest-accept
+source $(ghq root)/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
+ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+bindkey '\t ' autosuggest-accept
 ### https://mimosa-pudica.net/zsh-incremental.html
-source $HOME/.zsh/incr*.zsh
+# source $HOME/.zsh/incr*.zsh
 
 ### syntax highlighting
 source $(ghq root)/github.com/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -115,30 +116,40 @@ go() {
 # export IDF_PATH=~/esp/esp-idf
 
 ### Node.js
-node_init() {
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
-}
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+# node_init() {
+#   export NVM_DIR="$HOME/.nvm"
+#   [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
+# }
 
-nvm() {
-  unset -f nvm
-  node_init
-  nvm "$@"
-}
+# node_init
 
-node() {
-  unset -f node
-  node_init
-  node "$@"
-}
+# nvm() {
+#   unset -f nvm
+#   node_init
+#   nvm "$@"
+# }
 
-npm() {
-  unset -f npm
-  node_init
-  npm "$@"
-}
+# node() {
+#   unset -f node
+#   node_init
+#   node "$@"
+# }
 
-# eval "$(direnv hook zsh)"
+# npm() {
+#   unset -f npm
+#   node_init
+#   npm "$@"
+# }
+
+# yarn() {
+#   unset -f yarn
+#   node_init
+#   yarn "$@"
+# }
+
+eval "$(direnv hook zsh)"
 
 gcloud_init() {
   ### The next line updates PATH for the Google Cloud SDK.
@@ -158,8 +169,9 @@ gcloud() {
 export PATH="$PATH:$(ghq root)/github.com/flutter/flutter/bin"
 
 ### opam configuration
-# test -r /Users/ataran/.opam/opam-init/init.zsh && . /Users/ataran/.opam/opam-init/init.zsh >/dev/null 2>/dev/null || true
+test -r /Users/ataran/.opam/opam-init/init.zsh && . /Users/ataran/.opam/opam-init/init.zsh >/dev/null 2>/dev/null || true
 # alias ocaml="rlwrap ocaml"
+eval $(opam env)
 
 ### ngspice
 # export PATH="/Applications/ngspice/bin/:$PATH"
@@ -170,11 +182,18 @@ export PATH="$PATH:$(ghq root)/github.com/flutter/flutter/bin"
 ### Dart
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
+### JetBrains
+export PATH="$PATH":"$HOME/.jetbrains/bin"
+
+### Java ###
+export JAVA_HOME=`/usr/libexec/java_home -v 14`
 
 ### aliases ###
 alias myip='curl http://ipecho.net/plain; echo'
 alias reload='source $HOME/.zshrc'
 alias zshconfig='code $(ghq root)/github.com/atrn0/dotfiles'
+alias d='docker'
+alias dco='docker-compose'
 
 # if (which zprof >/dev/null 2>&1); then
 #   zprof
