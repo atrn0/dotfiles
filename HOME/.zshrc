@@ -194,6 +194,7 @@ alias reload='source $HOME/.zshrc'
 alias zshconfig='code $(ghq root)/github.com/atrn0/dotfiles'
 alias d='docker'
 alias dco='docker-compose'
+alias dab='git branch -D `git branch --merged | grep -v \* | xargs`'
 
 # if (which zprof >/dev/null 2>&1); then
 #   zprof
