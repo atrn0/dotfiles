@@ -5,8 +5,37 @@
 #   Arata Sato <densiarata2@gmail.com>
 
 ### completion
-fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
-fpath=($(ghq root)/github.com/zsh-users/zsh-completions/src $fpath)
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+else 
+  echo 'brew is not installed'
+  exit 1
+fi
+
+### install go
+if ! type go &>/dev/null; then
+  echo 'installing go'
+  brew install go || exit 1
+fi
+
+### init go
+if type go &>/dev/null; then
+  GOPATH=$(go env GOPATH)
+  GOROOT=$(go env GOROOT)
+  export PATH="$GOROOT/bin:$PATH"
+  export PATH="$PATH:$GOPATH/bin"
+fi
+
+### install ghq
+if ! type ghq &>/dev/null; then
+  echo 'installing ghq'
+  go get github.com/x-motemen/ghq && echo 'ghq installed' || exit 1
+fi
+
+if type ghq &>/dev/null; then
+  FPATH=$(ghq root)/github.com/zsh-users/zsh-completions/src:$FPATH
+fi
+
 fpath=($HOME/.zsh/completion $fpath)
 source $HOME/.zsh/completion.zsh
 autoload -U compinit
@@ -17,21 +46,40 @@ compinit -C
 
 ### Pure prompt
 ### https://github.com/sindresorhus/pure
-autoload -U promptinit; promptinit
-PURE_PROMPT_SYMBOL=🌵
-zstyle :prompt:pure:git:branch color '#bbb'
-prompt pure
+PURE_REPO_REMOTE=github.com/sindresorhus/pure
+FPATH=$(ghq root)/$PURE_REPO_REMOTE:$FPATH
+autoload -U promptinit; promptinit;
+if prompt -p pure | grep 'Unknown theme: pure'; then
+  echo 'installing pure'
+  ghq get $PURE_REPO_REMOTE
+  autoload -U promptinit; promptinit
+fi
+
+if ! prompt -p pure | grep 'Unknown theme: pure'; then
+  PURE_PROMPT_SYMBOL=🌵
+  zstyle :prompt:pure:git:branch color '#bbb'
+  prompt pure
+fi
 
 ### incremental completion
-source $(ghq root)/github.com/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
+AUTO_SUGGESTION_REPO_REMOTE=github.com/zsh-users/zsh-autosuggestions
+if [ ! -e $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE ]; then
+  ghq get $AUTO_SUGGESTION_REPO_REMOTE || exit 1
+fi
+source $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
 ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+ZSH_AUTOSUGGEST_USE_ASYNC=true
 bindkey '\t ' autosuggest-accept
 ### https://mimosa-pudica.net/zsh-incremental.html
 # source $HOME/.zsh/incr*.zsh
 
 ### syntax highlighting
-source $(ghq root)/github.com/zsh-users/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+SYNTAX_HIGHLIGHTING_REPO_REMOTE=github.com/zsh-users/zsh-syntax-highlighting
+if [ ! -e $(ghq root)/$SYNTAX_HIGHLIGHTING_REPO_REMOTE ]; then
+  ghq get $SYNTAX_HIGHLIGHTING_REPO_REMOTE || exit 1
+fi
+source $(ghq root)/$SYNTAX_HIGHLIGHTING_REPO_REMOTE/zsh-syntax-highlighting.zsh
 
 ### vim style key bind
 bindkey -v
@@ -40,10 +88,16 @@ bindkey -v
 ### https://github.com/wting/autojump
 ### make sure to use Python3
 # [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+if ! type autojump &>/dev/null; then
+  brew install autojump
+fi
 [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 
 ### zsh-history-substring-search
 ### https://github.com/zsh-users/zsh-history-substring-search
+if ! brew list zsh-history-substring-search &>/dev/null; then
+  brew install zsh-history-substring-search
+fi
 source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
@@ -51,133 +105,64 @@ bindkey '^[[B' history-substring-search-down
 # ------------------------------------------------------------------------------
 
 ### Python
+if ! type pyenv &>/dev/null; then
+  brew install pyenv
+fi
 py_init() {
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PYENV_ROOT/bin:$PATH"
   # Setting for pip
   export PATH="$PYENV_ROOT/shims:$PATH"
   eval "$(pyenv init -)"
-  # eval "$(pipenv --completion)"
 }
 
-py_init
-
-# pyenv() {
-#   unset -f pyenv
-#   py_init
-#   pyenv "$@"
-# }
-
-# python() {
-#   unset -f python
-#   py_init
-#   python "$@"
-# }
-
-# pipenv() {
-#   unset -f pipenv
-#   py_init
-#   pipenv "$@"
-# }
+py_init &!
 
 ### Ruby
+if ! type rbenv &>/dev/null; then
+  brew install rbenv
+fi
 rb_init() {
   export RBENV_ROOT="$HOME/.rbenv"
   export PATH="$RBENV_ROOT/bin:$PATH"
   eval "$(rbenv init -)"
 }
 
-rb_init
-
-### Go
-go_init() {
-  # export GOPATH=$HOME/go
-  export GOENV_ROOT="$HOME/.goenv"
-  export PATH="$GOENV_ROOT/bin:$PATH"
-  export PATH="$GOROOT/bin:$PATH"
-  export PATH="$PATH:$GOPATH/bin"
-  eval "$(goenv init -)"
-}
-
-goenv() {
-  unset -f goenv
-  go_init
-  goenv "$@"
-}
-
-go() {
-  unset -f go
-  go_init
-  go "$@"
-}
+rb_init &!
 
 ### ESP-IDF
 # export PATH=$HOME/esp/xtensa-esp32-elf/bin:$PATH
 # export IDF_PATH=~/esp/esp-idf
 
 ### Node.js
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
-# node_init() {
-#   export NVM_DIR="$HOME/.nvm"
-#   [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
-# }
-
-# node_init
-
-# nvm() {
-#   unset -f nvm
-#   node_init
-#   nvm "$@"
-# }
-
-# node() {
-#   unset -f node
-#   node_init
-#   node "$@"
-# }
-
-# npm() {
-#   unset -f npm
-#   node_init
-#   npm "$@"
-# }
-
-# yarn() {
-#   unset -f yarn
-#   node_init
-#   yarn "$@"
-# }
-
-eval "$(direnv hook zsh)"
-
-gcloud_init() {
-  ### The next line updates PATH for the Google Cloud SDK.
-  if [ -f '/Users/ataran/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ataran/google-cloud-sdk/path.zsh.inc'; fi
-
-  ### The next line enables shell command completion for gcloud.
-  if [ -f '/Users/ataran/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ataran/google-cloud-sdk/completion.zsh.inc'; fi
+nvm_init() {
+  export NVM_DIR="$HOME/.nvm"
+  if [ ! -e $NVM_DIR ]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | sh
+  fi
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 }
 
-gcloud() {
-  unset -f gcloud
-  gcloud_init
-  gcloud "$@"
-}
+nvm_init &!
+
+# eval "$(direnv hook zsh)"
+
+# gcloud_init() {
+#   ### The next line updates PATH for the Google Cloud SDK.
+#   if [ -f '/Users/ataran/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ataran/google-cloud-sdk/path.zsh.inc'; fi
+
+#   ### The next line enables shell command completion for gcloud.
+#   if [ -f '/Users/ataran/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ataran/google-cloud-sdk/completion.zsh.inc'; fi
+# }
 
 ### path for flutter
-export PATH="$PATH:$(ghq root)/github.com/flutter/flutter/bin"
+# export PATH="$PATH:$(ghq root)/github.com/flutter/flutter/bin"
 
-### opam configuration
-test -r /Users/ataran/.opam/opam-init/init.zsh && . /Users/ataran/.opam/opam-init/init.zsh >/dev/null 2>/dev/null || true
-# alias ocaml="rlwrap ocaml"
-eval $(opam env)
-
-### ngspice
-# export PATH="/Applications/ngspice/bin/:$PATH"
-
-### Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-# export PATH="$PATH:$HOME/.rvm/bin"
+# ### opam configuration
+# test -r /Users/ataran/.opam/opam-init/init.zsh && . /Users/ataran/.opam/opam-init/init.zsh >/dev/null 2>/dev/null || true
+# # alias ocaml="rlwrap ocaml"
+# eval $(opam env)
 
 ### Dart
 export PATH="$PATH":"$HOME/.pub-cache/bin"
@@ -186,7 +171,7 @@ export PATH="$PATH":"$HOME/.pub-cache/bin"
 export PATH="$PATH":"$HOME/.jetbrains/bin"
 
 ### Java ###
-export JAVA_HOME=`/usr/libexec/java_home -v 14`
+# export JAVA_HOME=`/usr/libexec/java_home -v 14`
 
 ### aliases ###
 alias myip='curl http://ipecho.net/plain; echo'
