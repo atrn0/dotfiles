@@ -1,5 +1,5 @@
 # dotfiles
 
 ```sh
-ls -A | xargs -I {} ln -sf $PWD/{} ~/
+ls -A HOME | xargs -I {} ln -sf $PWD/{} ~/
 ```
