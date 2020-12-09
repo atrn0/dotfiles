@@ -116,7 +116,7 @@ py_init() {
   eval "$(pyenv init -)"
 }
 
-py_init &!
+py_init
 
 ### Ruby
 if ! type rbenv &>/dev/null; then
@@ -128,7 +128,7 @@ rb_init() {
   eval "$(rbenv init -)"
 }
 
-rb_init &!
+rb_init
 
 ### ESP-IDF
 # export PATH=$HOME/esp/xtensa-esp32-elf/bin:$PATH
