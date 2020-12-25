@@ -173,6 +173,21 @@ export PATH="$PATH":"$HOME/.jetbrains/bin"
 ### Java ###
 # export JAVA_HOME=`/usr/libexec/java_home -v 14`
 
+# export PATH="/usr/local/opt/llvm@9/bin:$PATH"
+
+### Rust ###
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# use Touch ID for sudo
+# https://gist.github.com/kawaz/d95fb3b547351e01f0f3f99783180b9f
+if ! grep -Eq '^auth\s.*\spam_tid\.so$' /etc/pam.d/sudo; then
+  ( set -e; set -o pipefail
+    # 最初の auth として pam_tid.so を追加
+    pam_sudo=$(awk 'fixed||!/^auth /{print} !fixed&&/^auth/{print "auth       sufficient     pam_tid.so";print;fixed=1}' /etc/pam.d/sudo)
+    sudo tee /etc/pam.d/sudo <<<"$pam_sudo"
+  )
+fi
+
 ### aliases ###
 alias myip='curl http://ipecho.net/plain; echo'
 alias reload='source $HOME/.zshrc'
