@@ -1,5 +1,7 @@
 # dotfiles
 
+## macOS
+
 ```sh
-ls -A HOME | xargs -I {} ln -sf $PWD/{} ~/
+make mac
 ```
