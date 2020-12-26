@@ -144,7 +144,7 @@ nvm_init() {
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 }
 
-nvm_init &!
+nvm_init
 
 # eval "$(direnv hook zsh)"
 
