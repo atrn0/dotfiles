@@ -81,8 +81,8 @@ if [ ! -e $(ghq root)/$SYNTAX_HIGHLIGHTING_REPO_REMOTE ]; then
 fi
 source $(ghq root)/$SYNTAX_HIGHLIGHTING_REPO_REMOTE/zsh-syntax-highlighting.zsh
 
-### vim style key bind
-bindkey -v
+### emacs style key bind
+bindkey -e
 
 ### autojump
 ### https://github.com/wting/autojump
@@ -99,8 +99,8 @@ if ! brew list zsh-history-substring-search &>/dev/null; then
   brew install zsh-history-substring-search
 fi
 source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
 
 # ------------------------------------------------------------------------------
 
