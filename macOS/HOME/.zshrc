@@ -43,7 +43,7 @@ compinit -C
 
 # ------------------------------------------------------------------------------
 ##### Plugins #####
-
+RPROMPT='$(git config --local --get user.email 2>/dev/null)'
 ### Pure prompt
 ### https://github.com/sindresorhus/pure
 PURE_REPO_REMOTE=github.com/sindresorhus/pure
@@ -57,6 +57,7 @@ fi
 
 if ! prompt -p pure | grep 'Unknown theme: pure'; then
   PURE_PROMPT_SYMBOL=🌵
+  PURE_GIT_UNTRACKED_DIRTY=0
   zstyle :prompt:pure:git:branch color '#bbb'
   prompt pure
 fi
@@ -177,6 +178,9 @@ export PATH="$PATH":"$HOME/.jetbrains/bin"
 
 ### Rust ###
 export PATH="$HOME/.cargo/bin:$PATH"
+
+### Wantedly ###
+export PATH=$HOME/.wantedly/bin:$PATH
 
 # use Touch ID for sudo
 # https://gist.github.com/kawaz/d95fb3b547351e01f0f3f99783180b9f
