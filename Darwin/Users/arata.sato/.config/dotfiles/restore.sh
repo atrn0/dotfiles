@@ -52,7 +52,7 @@ if [ -e $BREWFILE ]; then
 
     case $ans in
     "" | [Yy]* )
-        brew bundle --file=$BREWFILE --no-lock
+        brew bundle --file=$BREWFILE --no-lock || true
         ;;
     esac
 fi
@@ -76,3 +76,18 @@ fi
 echo "use Touch ID for sudo"
 # https://gist.github.com/kawaz/d95fb3b547351e01f0f3f99783180b9f
 curl -fsSL https://gist.githubusercontent.com/kawaz/d95fb3b547351e01f0f3f99783180b9f/raw/bf4cc90f262206feeac062acc5139584a89d6c4a/install-pam_tid-and-pam_reattach.sh | bash
+
+# restore asdf plugins
+if type asdf &>/dev/null; then
+    echo -n "install asdf plugins? [Y/n]: "
+    read ans
+
+    case $ans in
+    "" | [Yy]* )
+        cd ~
+        perl -pe "s/\s.+//" .tool-versions | xargs -I{} asdf plugin add {}
+        asdf install
+        cd - > /dev/null
+        ;;
+    esac
+fi
