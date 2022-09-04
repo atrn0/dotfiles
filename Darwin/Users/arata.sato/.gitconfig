@@ -1,0 +1,25 @@
+[user]
+	name = Arata Sato
+	email = aratsato@gmail.com
+[core]
+	autocrlf = input
+	excludesfile = ~/.config/git/ignore
+[ghq]
+	root=~/ghq
+	user=atrn0
+[init]
+	defaultBranch = main
+[gpg]
+	program = gpg
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false
+[pull]
+	rebase = false
+[push]
+	default = current
+[alias]
+  co = checkout
+  br = branch
+  st = status

@@ -1,0 +1,16 @@
+.DS_Store
+.idea/
+.vscode/
+
+# emacs
+
+*~
+\#*\#
+
+# direnv
+
+.envrc
+
+# asdf
+
+.tool-versions
