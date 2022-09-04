@@ -20,7 +20,7 @@ Darwin: link
 	$(MAKE) link ROOT=custom
 	cd $(HOME)/.config/dotfiles; \
 	BREWFILE=Brewfile bash ./restore.sh; \
-	cd -
+	cd - > /dev/null
 
 link:
 	cd $(ROOT); \
@@ -31,4 +31,4 @@ link:
 dump:
 	cd $(HOME)/.config/dotfiles; \
 	brew bundle dump -f --file=Brewfile; \
-	cd -
+	cd - > /dev/null
