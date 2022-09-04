@@ -85,10 +85,8 @@ if type asdf &>/dev/null; then
     case $ans in
     "" | [Yy]* )
         cd ~
-        set -x
-        perl -pe "s/\s.+//" .tool-versions | xargs -I{} asdf plugin add {}
-        asdf install
-        set +x
+        perl -pe "s/\s.+//" .tool-versions | xargs -I{} asdf plugin add {} || true
+        asdf install || true
         cd - > /dev/null
         ;;
     esac
