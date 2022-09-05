@@ -190,6 +190,8 @@ alias glog='git log --graph --date=format-local:"%Y/%m/%d %H:%M:%S" --pretty=for
 alias tf="terraform"
 alias d="docker"
 alias dco="docker compose"
+alias g="git"
+alias m="make"
 alias rcode="code --folder-uri \"vscode-remote://ssh-remote+ien20s/home/atrn0/ghq\""
 
 export AWS_ASSUME_ROLE_TTL=1h
