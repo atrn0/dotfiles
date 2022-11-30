@@ -158,15 +158,18 @@ export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
 
 ### terminal-notifier
 function preexec () {
+   _prev_cmd=$1
    _prev_cmd_start_time=$SECONDS
    _cmd_is_running=true
 }
 
 function precmd() {
+  _status=$?
   if $_cmd_is_running ; then
     _prev_cmd_exec_time=$((SECONDS - _prev_cmd_start_time))
-    if ((_prev_cmd_exec_time > 10)); then
-      terminal-notifier -message "🎍" -activate com.googlecode.iterm2
+    if ((_prev_cmd_exec_time > 5)); then
+      title=`[ $_status = 0 ] && echo 🟢 || echo 🔴`
+      terminal-notifier -title $title -subtitle "$_prev_cmd" -message "finished" -activate com.googlecode.iterm2
     fi
   fi
   _cmd_is_running=false
