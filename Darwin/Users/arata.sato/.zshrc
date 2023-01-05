@@ -8,9 +8,6 @@
 
 ARCH=`arch`
 
-autoload -Uz compinit
-compinit
-
 if [[ "${ARCH}" == "arm64" ]]
 then
     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -24,6 +21,9 @@ else
 fi
 
 fpath=($HOME/.zsh/completion $fpath)
+
+autoload -U compinit
+compinit -i
 
 # ### init go
 if type go &>/dev/null; then
