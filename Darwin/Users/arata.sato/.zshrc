@@ -181,6 +181,13 @@ export GREP_OPTIONS='--color=auto'
 ### k8s
 source <(kubectl completion zsh)
 
+### fzf
+[ -f ~/.config/.fzf.zsh ] && source ~/.config/.fzf.zsh
+export FZF_DEFAULT_OPTS="--multi --bind=ctrl-k:kill-line"
+export FZF_TMUX=1
+export FZF_TMUX_OPTS="-p 80%"
+export FZF_CTRL_T_OPTS="--preview 'cat {}'"
+
 ### aliases ###
 alias myip='curl http://ipecho.net/plain; echo'
 alias reload='exec $SHELL -l'
