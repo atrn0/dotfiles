@@ -203,6 +203,7 @@ alias dco="docker compose"
 alias g="git"
 alias m="make"
 alias rcode="code --folder-uri \"vscode-remote://ssh-remote+ien20s/home/atrn0/ghq\""
+alias now='date +"%Y-%m-%dT%H:%M:%S%z"'
 
 export AWS_ASSUME_ROLE_TTL=1h
 export GREP_OPTIONS='--color=auto'
@@ -212,3 +213,4 @@ export GREP_OPTIONS='--color=auto'
 # if (which zprof >/dev/null 2>&1); then
 #   zprof
 # fi
+export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
