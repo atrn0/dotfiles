@@ -41,24 +41,29 @@ fi
 
 # ------------------------------------------------------------------------------
 # ##### Plugins #####
+
+
 # RPROMPT='$(git config --local --get user.email 2>/dev/null)'
 ### Pure prompt
 ### https://github.com/sindresorhus/pure
-PURE_REPO_REMOTE=github.com/sindresorhus/pure
-FPATH=$(ghq root)/$PURE_REPO_REMOTE:$FPATH
-autoload -U promptinit; promptinit;
-if prompt -p pure | grep 'Unknown theme: pure'; then
-  echo 'installing pure'
-  ghq get $PURE_REPO_REMOTE
-  autoload -U promptinit; promptinit
-fi
+# PURE_REPO_REMOTE=github.com/sindresorhus/pure
+# FPATH=$(ghq root)/$PURE_REPO_REMOTE:$FPATH
+# autoload -U promptinit; promptinit;
+# if prompt -p pure | grep 'Unknown theme: pure'; then
+#   echo 'installing pure'
+#   ghq get $PURE_REPO_REMOTE
+#   autoload -U promptinit; promptinit
+# fi
+#
+# if ! prompt -p pure | grep 'Unknown theme: pure'; then
+#   PURE_PROMPT_SYMBOL=🌵
+#   PURE_GIT_UNTRACKED_DIRTY=0
+#   zstyle :prompt:pure:git:branch color '#bbb'
+#   prompt pure
+# fi
 
-if ! prompt -p pure | grep 'Unknown theme: pure'; then
-  PURE_PROMPT_SYMBOL=🌵
-  PURE_GIT_UNTRACKED_DIRTY=0
-  zstyle :prompt:pure:git:branch color '#bbb'
-  prompt pure
-fi
+### Starship
+eval "$(starship init zsh)"
 
 ### incremental completion
 AUTO_SUGGESTION_REPO_REMOTE=github.com/zsh-users/zsh-autosuggestions
@@ -151,7 +156,19 @@ complete -o nospace -C $(brew --prefix)/bin/terraform terraform
 . $(brew --prefix asdf)/etc/bash_completion.d/asdf.bash
 
 ### Java
-. ~/.asdf/plugins/java/set-java-home.zsh
+# instead of `. ~/.asdf/plugins/java/set-java-home.zsh`
+asdf_update_java_home() {
+  local java_path
+  java_path="$(asdf which java)"
+  if [[ -n "${java_path}" ]]; then
+    export JAVA_HOME
+    JAVA_HOME="$(dirname "$(dirname "${java_path:A}")")"
+    export JDK_HOME=${JAVA_HOME}
+  fi
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook chpwd asdf_update_java_home
 
 ### iTerm2
 export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
