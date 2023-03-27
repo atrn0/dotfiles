@@ -13,6 +13,17 @@ then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+### history
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+setopt HIST_IGNORE_DUPS
+setopt share_history
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_REDUCE_BLANKS
+
+
 ### completion
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
@@ -63,18 +74,18 @@ fi
 # fi
 
 ### Starship
-eval "$(starship init zsh)"
+# eval "$(starship init zsh)"
 
 ### incremental completion
-AUTO_SUGGESTION_REPO_REMOTE=github.com/zsh-users/zsh-autosuggestions
-if [ ! -e $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE ]; then
-  ghq get $AUTO_SUGGESTION_REPO_REMOTE
-fi
-source $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
-ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-ZSH_AUTOSUGGEST_USE_ASYNC=true
-bindkey '\t ' autosuggest-accept
+# AUTO_SUGGESTION_REPO_REMOTE=github.com/zsh-users/zsh-autosuggestions
+# if [ ! -e $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE ]; then
+#   ghq get $AUTO_SUGGESTION_REPO_REMOTE
+# fi
+# source $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE/zsh-autosuggestions.zsh
+# ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
+# ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+# ZSH_AUTOSUGGEST_USE_ASYNC=true
+# bindkey '\t ' autosuggest-accept
 # ### https://mimosa-pudica.net/zsh-incremental.html
 # # source $HOME/.zsh/incr*.zsh
 
@@ -103,16 +114,16 @@ fi
 
 ### zsh-history-substring-search
 ### https://github.com/zsh-users/zsh-history-substring-search
-if ! brew list zsh-history-substring-search &>/dev/null; then
-  brew install zsh-history-substring-search
-fi
-if [[ "${ARCH}" == "arm64" ]] then
-  source /opt/homebrew/Cellar/zsh-history-substring-search/1.0.2/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-else
-  source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-fi
-bindkey '^P' history-substring-search-up
-bindkey '^N' history-substring-search-down
+# if ! brew list zsh-history-substring-search &>/dev/null; then
+#   brew install zsh-history-substring-search
+# fi
+# if [[ "${ARCH}" == "arm64" ]] then
+#   source /opt/homebrew/Cellar/zsh-history-substring-search/1.0.2/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+# else
+#   source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+# fi
+# bindkey '^P' history-substring-search-up
+# bindkey '^N' history-substring-search-down
 
 # # ------------------------------------------------------------------------------
 ### path for flutter
@@ -174,23 +185,23 @@ add-zsh-hook chpwd asdf_update_java_home
 export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
 
 ### terminal-notifier
-function preexec () {
-   _prev_cmd=$1
-   _prev_cmd_start_time=$SECONDS
-   _cmd_is_running=true
-}
-
-function precmd() {
-  _status=$?
-  if $_cmd_is_running ; then
-    _prev_cmd_exec_time=$((SECONDS - _prev_cmd_start_time))
-    if ((_prev_cmd_exec_time > 5)); then
-      title=`[ $_status = 0 ] && echo 🟢 || echo 🔴`
-      terminal-notifier -title $title -subtitle "$_prev_cmd" -message "finished" -activate com.googlecode.iterm2
-    fi
-  fi
-  _cmd_is_running=false
-}
+# function preexec () {
+#    _prev_cmd=$1
+#    _prev_cmd_start_time=$SECONDS
+#    _cmd_is_running=true
+# }
+#
+# function precmd() {
+#   _status=$?
+#   if $_cmd_is_running ; then
+#     _prev_cmd_exec_time=$((SECONDS - _prev_cmd_start_time))
+#     if ((_prev_cmd_exec_time > 5)); then
+#       title=`[ $_status = 0 ] && echo 🟢 || echo 🔴`
+#       terminal-notifier -title $title -subtitle "$_prev_cmd" -message "finished" -activate com.googlecode.iterm2
+#     fi
+#   fi
+#   _cmd_is_running=false
+# }
 
 ### grep
 export GREP_OPTIONS='--color=auto'
@@ -199,11 +210,11 @@ export GREP_OPTIONS='--color=auto'
 source <(kubectl completion zsh)
 
 ### fzf
-[ -f ~/.config/.fzf.zsh ] && source ~/.config/.fzf.zsh
-export FZF_DEFAULT_OPTS="--multi --bind=ctrl-k:kill-line"
-export FZF_TMUX=1
-export FZF_TMUX_OPTS="-p 80%"
-export FZF_CTRL_T_OPTS="--preview 'cat {}'"
+# [ -f ~/.config/.fzf.zsh ] && source ~/.config/.fzf.zsh
+# export FZF_DEFAULT_OPTS="--multi --bind=ctrl-k:kill-line"
+# export FZF_TMUX=1
+# export FZF_TMUX_OPTS="-p 80%"
+# export FZF_CTRL_T_OPTS="--preview 'cat {}'"
 
 ### aliases ###
 alias myip='curl http://ipecho.net/plain; echo'
@@ -221,6 +232,28 @@ alias g="git"
 alias m="make"
 alias rcode="code --folder-uri \"vscode-remote://ssh-remote+ien20s/home/atrn0/ghq\""
 alias now='date +"%Y-%m-%dT%H:%M:%S%z"'
+
+function decode_uri() {
+  if [ -n "$1" ]; then
+    python3 -c "import sys, urllib.parse; print(urllib.parse.unquote('$1'))"
+  elif [ -t 0 ]; then
+    echo "Error: No input provided" >&2
+    return 1
+  else
+    python3 -c "import sys, urllib.parse; print(urllib.parse.unquote(sys.stdin.read().rstrip()))"
+  fi
+}
+
+function decode_jwt() {
+  if [ -n "$1" ]; then
+    python -c "import sys, jwt, json; print(json.dumps(jwt.decode('$1', options={'verify_signature': False}), indent=2))"
+  elif [ -t 0 ]; then
+    echo "Error: No input provided" >&2
+    return 1
+  else
+    python -c "import sys, jwt, json; print(json.dumps(jwt.decode(sys.stdin.read().strip(), options={'verify_signature': False}), indent=2))"
+  fi
+}
 
 export AWS_ASSUME_ROLE_TTL=1h
 export GREP_OPTIONS='--color=auto'
