@@ -23,3 +23,5 @@
   co = checkout
   br = branch
   st = status
+[branch]
+  autoSetupMerge = simple
