@@ -19,9 +19,8 @@
 	rebase = false
 [push]
 	default = current
+	autoSetupRemote = true
 [alias]
   co = checkout
   br = branch
   st = status
-[branch]
-  autoSetupMerge = simple
