@@ -18,8 +18,8 @@
 [pull]
 	rebase = false
 [push]
-	default = current
-	autoSetupRemote = true
+  autoSetupRemote = true
+  default = current
 [alias]
   co = checkout
   br = branch
