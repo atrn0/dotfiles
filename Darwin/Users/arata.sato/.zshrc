@@ -264,3 +264,5 @@ export GREP_OPTIONS='--color=auto'
 #   zprof
 # fi
 export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
+export BUILDKIT_PROGRESS=plain
+export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
