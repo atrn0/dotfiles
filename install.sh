@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+git --version # to check git is available
+
 git clone https://github.com/atrn0/dotfiles.git ~/ghq/github.com/atrn0/dotfiles || true
 cd ~/ghq/github.com/atrn0/dotfiles
 make
