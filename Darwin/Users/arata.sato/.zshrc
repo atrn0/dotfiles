@@ -258,11 +258,38 @@ function decode_jwt() {
 export AWS_ASSUME_ROLE_TTL=1h
 export GREP_OPTIONS='--color=auto'
 
+export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
+export BUILDKIT_PROGRESS=plain
+export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+
+# mysql-client
+export PATH="$(brew --prefix mysql-client)/bin:$PATH"
+export LDFLAGS="-L$(brew --prefix mysql-client)/lib $LDFLAGS"
+export CPPFLAGS="-I$(brew --prefix mysql-client)/include $CPPFLAGS"
+export PKG_CONFIG_PATH="$(brew --prefix mysql-client)/lib/pkgconfig:$PKG_CONFIG_PATH"
+export LIBRARY_PATH="$(brew --prefix mysql-client)/lib:$LIBRARY_PATH"
+
+# curl
+export LDFLAGS="-L$(brew --prefix curl)/lib $LDFLAGS"
+export CPPFLAGS="-I$(brew --prefix curl)/include $CPPFLAGS"
+export PKG_CONFIG_PATH="$(brew --prefix curl)/lib/pkgconfig:$PKG_CONFIG_PATH"
+export LIBRARY_PATH="$(brew --prefix curl)/lib:$LIBRARY_PATH"
+
+# zstd
+export LDFLAGS="-L$(brew --prefix zstd)/lib $LDFLAGS"
+export CPPFLAGS="-I$(brew --prefix zstd)/include $CPPFLAGS"
+export PKG_CONFIG_PATH="$(brew --prefix zstd)/lib/pkgconfig:$PKG_CONFIG_PATH"
+export LIBRARY_PATH="$(brew --prefix zstd)/lib:$LIBRARY_PATH"
+
+# openssl
+export LDFLAGS="-L$(brew --prefix openssl)/lib $LDFLAGS"
+export CPPFLAGS="-I$(brew --prefix openssl)/include $CPPFLAGS"
+export PKG_CONFIG_PATH="$(brew --prefix openssl)/lib/pkgconfig:$PKG_CONFIG_PATH"
+export LIBRARY_PATH="$(brew --prefix openssl)/lib:$LIBRARY_PATH"
+export OPENSSL_PREFIX="$(brew --prefix openssl@3.2)"
+
 [ -f ~/.zsh/local.zsh ] && . ~/.zsh/local.zsh
 
 # if (which zprof >/dev/null 2>&1); then
 #   zprof
 # fi
-export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
-export BUILDKIT_PROGRESS=plain
-export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
