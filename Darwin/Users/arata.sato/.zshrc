@@ -258,9 +258,9 @@ function decode_jwt() {
 export AWS_ASSUME_ROLE_TTL=1h
 export GREP_OPTIONS='--color=auto'
 
-export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
+# export PATH="/opt/homebrew/opt/binutils/bin:$PATH"
 export BUILDKIT_PROGRESS=plain
-export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+# export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 
 # mysql-client
 export PATH="$(brew --prefix mysql-client)/bin:$PATH"
@@ -286,7 +286,10 @@ export LDFLAGS="-L$(brew --prefix openssl)/lib $LDFLAGS"
 export CPPFLAGS="-I$(brew --prefix openssl)/include $CPPFLAGS"
 export PKG_CONFIG_PATH="$(brew --prefix openssl)/lib/pkgconfig:$PKG_CONFIG_PATH"
 export LIBRARY_PATH="$(brew --prefix openssl)/lib:$LIBRARY_PATH"
-export OPENSSL_PREFIX="$(brew --prefix openssl@3.2)"
+export OPENSSL_PREFIX="$(brew --prefix openssl@3)"
+
+# GitHub Copilot
+eval "$(gh copilot alias -- zsh)"
 
 [ -f ~/.zsh/local.zsh ] && . ~/.zsh/local.zsh
 
