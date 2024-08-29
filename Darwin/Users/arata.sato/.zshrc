@@ -216,6 +216,9 @@ source <(kubectl completion zsh)
 # export FZF_TMUX_OPTS="-p 80%"
 # export FZF_CTRL_T_OPTS="--preview 'cat {}'"
 
+### GitHub Copilot
+eval "$(gh copilot alias -- zsh)"
+
 ### aliases ###
 alias myip='curl http://ipecho.net/plain; echo'
 alias reload='exec $SHELL -l'
