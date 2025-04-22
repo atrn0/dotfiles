@@ -1,0 +1,2 @@
+[Variables::ProhibitUnusedVariables]
+severity = 1
