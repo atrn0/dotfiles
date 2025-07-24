@@ -61,17 +61,16 @@ precmd () {
   else 
     export GIT_HAS_DIFF=""
   fi
-  # git管理されているか確認
-  git status --porcelain >/dev/null 2>&1
-  if [ $? -ne 0 ];then
-    export GIT_HAS_DIFF=""
-  fi
   export BRANCH_NAME=$(git branch --show-current 2>/dev/null)
+  if [ -z "${BRANCH_NAME}" ]; then
+    export PROMPT_GIT_INFO=""
+  else
+    export PROMPT_GIT_INFO="%F{yellow}git:%f%F{green}[${BRANCH_NAME}]%f ${GIT_HAS_DIFF}"
+  fi
 }
 
 PROMPT='
-%F{cyan}%~%f
-%F{yellow}git:%f%F{green}[${BRANCH_NAME}]%f ${GIT_HAS_DIFF}
+%F{cyan}%~%f ${PROMPT_GIT_INFO}
 %# '
 
 ### syntax highlighting
