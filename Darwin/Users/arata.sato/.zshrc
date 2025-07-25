@@ -53,41 +53,25 @@ fi
 # ------------------------------------------------------------------------------
 # ##### Plugins #####
 
+setopt prompt_subst #プロンプト表示する度に変数を展開
 
-# RPROMPT='$(git config --local --get user.email 2>/dev/null)'
-### Pure prompt
-### https://github.com/sindresorhus/pure
-# PURE_REPO_REMOTE=github.com/sindresorhus/pure
-# FPATH=$(ghq root)/$PURE_REPO_REMOTE:$FPATH
-# autoload -U promptinit; promptinit;
-# if prompt -p pure | grep 'Unknown theme: pure'; then
-#   echo 'installing pure'
-#   ghq get $PURE_REPO_REMOTE
-#   autoload -U promptinit; promptinit
-# fi
-#
-# if ! prompt -p pure | grep 'Unknown theme: pure'; then
-#   PURE_PROMPT_SYMBOL=🌵
-#   PURE_GIT_UNTRACKED_DIRTY=0
-#   zstyle :prompt:pure:git:branch color '#bbb'
-#   prompt pure
-# fi
+precmd () { 
+  if [ -n "$(git status --short 2>/dev/null)" ];then
+    export GIT_HAS_DIFF="±"
+  else 
+    export GIT_HAS_DIFF=""
+  fi
+  export BRANCH_NAME=$(git branch --show-current 2>/dev/null)
+  if [ -z "${BRANCH_NAME}" ]; then
+    export PROMPT_GIT_INFO=""
+  else
+    export PROMPT_GIT_INFO="%F{yellow}git:%f%F{green}[${BRANCH_NAME}]%f ${GIT_HAS_DIFF}"
+  fi
+}
 
-### Starship
-# eval "$(starship init zsh)"
-
-### incremental completion
-# AUTO_SUGGESTION_REPO_REMOTE=github.com/zsh-users/zsh-autosuggestions
-# if [ ! -e $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE ]; then
-#   ghq get $AUTO_SUGGESTION_REPO_REMOTE
-# fi
-# source $(ghq root)/$AUTO_SUGGESTION_REPO_REMOTE/zsh-autosuggestions.zsh
-# ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *,ls *"
-# ZSH_AUTOSUGGEST_STRATEGY=(completion history)
-# ZSH_AUTOSUGGEST_USE_ASYNC=true
-# bindkey '\t ' autosuggest-accept
-# ### https://mimosa-pudica.net/zsh-incremental.html
-# # source $HOME/.zsh/incr*.zsh
+PROMPT='
+%F{cyan}%~%f ${PROMPT_GIT_INFO}
+%# '
 
 ### syntax highlighting
 SYNTAX_HIGHLIGHTING_REPO_REMOTE=github.com/zsh-users/zsh-syntax-highlighting
