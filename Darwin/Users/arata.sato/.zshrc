@@ -194,11 +194,8 @@ export GREP_OPTIONS='--color=auto'
 source <(kubectl completion zsh)
 
 ### fzf
-# [ -f ~/.config/.fzf.zsh ] && source ~/.config/.fzf.zsh
-# export FZF_DEFAULT_OPTS="--multi --bind=ctrl-k:kill-line"
-# export FZF_TMUX=1
-# export FZF_TMUX_OPTS="-p 80%"
-# export FZF_CTRL_T_OPTS="--preview 'cat {}'"
+source <(fzf --zsh)
+export FZF_DEFAULT_OPTS="--bind=ctrl-k:kill-line"
 
 ### GitHub Copilot
 eval "$(gh copilot alias -- zsh)"
