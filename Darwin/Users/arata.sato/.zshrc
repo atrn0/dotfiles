@@ -96,19 +96,6 @@ else
   [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 fi
 
-### zsh-history-substring-search
-### https://github.com/zsh-users/zsh-history-substring-search
-# if ! brew list zsh-history-substring-search &>/dev/null; then
-#   brew install zsh-history-substring-search
-# fi
-# if [[ "${ARCH}" == "arm64" ]] then
-#   source /opt/homebrew/Cellar/zsh-history-substring-search/1.0.2/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-# else
-#   source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-# fi
-# bindkey '^P' history-substring-search-up
-# bindkey '^N' history-substring-search-down
-
 # # ------------------------------------------------------------------------------
 ### path for flutter
 export PATH="$PATH:$(ghq root)/github.com/flutter/flutter/bin"
